@@ -49,11 +49,11 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT record_date, db_size_pretty,
-       db_size - LAG(db_size) OVER (ORDER BY record_date) AS growth_bytes,
-       pg_size_pretty(db_size - LAG(db_size) OVER (ORDER BY record_date)) AS growth_pretty
-    FROM db_size_history
-    ORDER BY record_date;
+    SELECT dh.record_date, dh.db_size_pretty,
+       dh.db_size - LAG(dh.db_size) OVER (ORDER BY dh.record_date) AS growth_bytes,
+       pg_size_pretty(dh.db_size - LAG(dh.db_size) OVER (ORDER BY dh.record_date)) AS growth_pretty
+    FROM db_size_history dh
+    ORDER BY dh.record_date;
 END;
 $$ LANGUAGE plpgsql;
 
